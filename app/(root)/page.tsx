@@ -4,6 +4,11 @@ import TotalBalanceBox from "@/components/TotalBalanceBox";
 
 const Home = () => {
   const loggedIn = { firstName: 'Nan' };
+  
+  const accounts = [
+    { name: 'Checking', currentBalance: 750.35 },
+    { name: 'Savings', currentBalance: 500.00 }
+  ];
 
   return (
     <section className="home">
@@ -22,7 +27,7 @@ const Home = () => {
        totalCurrentBalance={1250.35}
        />
 
-       
+  
 
      </header>
      </div>
