@@ -1,4 +1,6 @@
 //shortcut rafce
+'use client'
+import React from 'react'
 // accept the props from page.tsx and define these type to a interface call HeaderBoxProps
 interface HeaderBoxProps {
     type?: 'title' | 'greeting';
