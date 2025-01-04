@@ -15,7 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { authFormSchema } from "@/lib/utils";
 import CustomInput from "./CustomInput";
 import { Loader2 } from "lucide-react";
@@ -42,6 +41,8 @@ const AuthForm = ({ type }: { type: string }) => {
     console.log(values);
     setisLoading(false);
   }
+
+
 
   return (
     <section className="auth-form">
@@ -100,7 +101,7 @@ const AuthForm = ({ type }: { type: string }) => {
                 </div>
                 <div className="flex gap-4">
                 <CustomInput control={form.control}
-                name="dateofBirth"
+                name="dateOfBirth"
                 label="Date of Birth"
                 placeholder="YYYY-MM-DD"/>
                 <CustomInput control={form.control}
@@ -125,7 +126,11 @@ const AuthForm = ({ type }: { type: string }) => {
               />
 
               <div className="flex flex-col gap-4">
-                <Button type="submit"  className="form-btn">
+              <Button 
+                  type="submit" 
+                  className="form-btn"
+                  
+                >
 
                   {isLoading ? (
                     <>
