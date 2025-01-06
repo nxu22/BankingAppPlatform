@@ -18,8 +18,12 @@ import {
 import { authFormSchema } from "@/lib/utils";
 import CustomInput from "./CustomInput";
 import { Loader2 } from "lucide-react";
+import SignUp from "@/app/(auth)/sign-up/page";
+import { signIn, signUp } from "@/lib/actions/user.actions";
+import router, { useRouter } from "next/router";
 
 const AuthForm = ({ type }: { type: string }) => {
+  const route = useRouter();
   const [user, setUser] = useState(null);
   const [isLoading, setisLoading] = useState(false);
   const FormSchema = authFormSchema(type)
@@ -34,12 +38,32 @@ const AuthForm = ({ type }: { type: string }) => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof FormSchema>) {
+  const onSubmit = async (data: z.infer<typeof FormSchema>) =>{
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    setisLoading(true);
-    console.log(values);
-    setisLoading(false);
+    setisLoading(true); 
+
+    try{
+      //sign up with appwrite and create plain token
+      if(type === 'sign-up') {
+      const newUser = await signUp (data);
+       setUser(newUser);
+      }
+      }
+      if(type === 'sign-in') {
+       const response = await signIn({
+       email:data.email,
+       password:data.password,
+       })
+       if(response) router.push('/')
+
+      }
+    }catch(error){
+console.log(error)
+    }finally{
+      setisLoading(false);
+    }
+    
   }
 
 
@@ -89,6 +113,10 @@ const AuthForm = ({ type }: { type: string }) => {
                 name="address"
                 label="Address"
                 placeholder="Enter your specific address"/>
+                <CustomInput control={form.control}
+                name="city"
+                label="City"
+                placeholder="Enter your specific city"/>
                 <div className="flex gap-4">
                 <CustomInput control={form.control}
                 name="state"
@@ -167,3 +195,7 @@ const AuthForm = ({ type }: { type: string }) => {
 };
 
 export default AuthForm;
+function signIn(arg0: { email: string; password: string; }) {
+  throw new Error("Function not implemented.");
+}
+
