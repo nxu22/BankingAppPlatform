@@ -24,6 +24,8 @@ import { useRouter } from "next/navigation";
 
 
 
+
+
 const AuthForm = ({ type }: { type: string }) => {
   const route = useRouter();
   const [user, setUser] = useState(null);
@@ -46,15 +48,17 @@ const AuthForm = ({ type }: { type: string }) => {
     setisLoading(true);
   
     try {
+      //sign up with appwrite & create plaid token
       if (type === 'sign-up') {
         const newUser = await signUp(data);
         setUser(newUser);
-      } else if (type === 'sign-in') {
-        //const response = await signIn({
-          //email: data.email,
-          //password: data.password,
-        //});
-        if (response) router.push('/');
+      } 
+      if (type === 'sign-in') {
+        const response = await signIn({
+        email: data.email,
+        password: data.password,
+        });
+        if (response) route.push('/');
       }
     } catch (error) {
       console.log(error);

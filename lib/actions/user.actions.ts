@@ -5,9 +5,14 @@ import { createAdminClient, createSessionClient } from "../appwrite";
 import { cookies } from "next/headers";
 import { parseStringify } from "../utils";
 
-export const signIn = async ()=> {
+export const signIn = async ({ email, password}:signInProps)=> {
     try{
-     //Mutation/Database / Mark fetch
+      //get appwrite account client
+      const { account } = await createAdminClient();
+      //create user session with email/password
+      const response = await account.createEmailPasswordSession(email,password);
+      //return stringified session data
+      return parseStringify(response); 
     }catch(error){
         console.error('Error', error);
     }
@@ -42,7 +47,7 @@ export const signUp = async (userData:SignUpParams) => {
 } 
 
 
-
+// checks if a user is currently logged in by attempting to get their account details and returns the user data if logged in, or null if not.
 export async function getLoggedInUser() {
     try {
       const { account } = await createSessionClient();
