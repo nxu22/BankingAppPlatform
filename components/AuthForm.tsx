@@ -20,7 +20,7 @@ import CustomInput from "./CustomInput";
 import { Loader2 } from "lucide-react";
 import SignUp from "@/app/(auth)/sign-up/page";
 import { getLoggedInUser, signIn, signUp } from "@/lib/actions/user.actions";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 
 
@@ -28,7 +28,7 @@ const AuthForm = ({ type }: { type: string }) => {
   const route = useRouter();
   const [user, setUser] = useState(null);
   const [isLoading, setisLoading] = useState(false);
-const loggedInUser = await getLoggedInUser
+
 
   const FormSchema = authFormSchema(type)
 

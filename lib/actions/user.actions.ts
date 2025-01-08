@@ -11,7 +11,8 @@ export const signIn = async ()=> {
     }catch(error){
         console.error('Error', error);
     }
-}
+} 
+
 
 export const signUp = async (userData:SignUpParams) => {
     const {email, password, firstName, lastName }= userData;
@@ -22,24 +23,25 @@ export const signUp = async (userData:SignUpParams) => {
         ID.unique(), 
         email, 
         password, 
-       '${firstNAme} ${lastName}'
+       `${firstName} ${lastName}`
     );
         const session = await account.createEmailPasswordSession(email, password);
       
-        cookies().set("appwrite-session", session.secret, {
+        (await cookies()).set("appwrite-session", session.secret, {
           path: "/",
           httpOnly: true,
-          sameSite: "strict",
+          sameSite: "strict",   
           secure: true,
         });
 
         return parseStringify(newUserAccount);
     }catch(error){
         console.error('Error', error);
+        throw error;
     }
 } 
 
-// 
+
 
 export async function getLoggedInUser() {
     try {
