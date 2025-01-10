@@ -23,7 +23,7 @@ const handleLogOut = async () =>{
 
     <div className={type === 'mobile' ? 'footer_email-mobile' : 'footer_email'}>
   <h1 className="text-14 truncate font-normal text-gray-700 font-semibold">
-    {user?.name} //If user is null - Returns undefined instead of crashing
+    {user?.name} {/* If user is null - Returns undefined instead of crashing */}
   </h1>
   <p className="text-14 truncate font-normal text-gray-600">
     {user?.email}
