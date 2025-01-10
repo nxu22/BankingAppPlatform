@@ -1,6 +1,17 @@
 import React from 'react'
+import Image from 'next/image'
+import { logoutAccount } from '@/lib/actions/user.actions'
+import { useRouter } from 'next/router'
 
 const footer = ({user,type='desktop'}:FooterProps) => {
+
+const handleLogOut = async () =>{
+
+  const router = useRouter();
+   const loggedOut = await logoutAccount();
+   if(loggedOut) router.push('/sign-in')
+} 
+
   return (
     <footer className="footer">
     <div className={type === 'mobile' ? 'footer_name-mobile' : 'footer_name'}>
@@ -10,10 +21,17 @@ const footer = ({user,type='desktop'}:FooterProps) => {
     </div>
 
     <div className={type === 'mobile' ? 'footer_email-mobile' : 'footer_email'}>
- <h1 className="text-14 truncate font-normal text-gray-600">
-   {user.name}
- </h1>
+  <h1 className="text-14 truncate font-normal text-gray-700 font-semibold">
+    {user.name}
+  </h1>
+  <p className="text-14 truncate font-normal text-gray-600">
+    {user.email}
+  </p>
 </div>
+
+<div className="footer_image" OnClick={handleLogOut}>
+<Image src="/icons/logout.svg" fill alt="jsm" />
+      </div>
     </footer>
   )
 }
