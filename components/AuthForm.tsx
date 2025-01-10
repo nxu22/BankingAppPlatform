@@ -23,9 +23,6 @@ import { getLoggedInUser, signIn, signUp } from "@/lib/actions/user.actions";
 import { useRouter } from "next/navigation";
 
 
-
-
-
 const AuthForm = ({ type }: { type: string }) => {
   const route = useRouter();
   const [user, setUser] = useState(null);
