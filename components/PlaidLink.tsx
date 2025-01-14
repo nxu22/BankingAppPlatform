@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Button } from './ui/button'
-import {PlaidLinkOnSuccess, PlaidLinkOptions} from  'react-plaid-link'
+import {PlaidLinkOnSuccess, PlaidLinkOptions, usePlaidLink} from  'react-plaid-link'
 import { StyledString } from 'next/dist/build/swc/types';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
+import { createLinkToken } from '@/lib/actions/user.actions';
 
 const PlaidLink = ({ user, variant }: PlaidLinkProps) => {
+  
   const router = useRouter();
   // 1. State Management
   const [token, setToken] = useState('');
@@ -13,13 +15,13 @@ const PlaidLink = ({ user, variant }: PlaidLinkProps) => {
   useEffect(() => {
     const getLinkToken = async () => {
       
-     // const data = await createLinkToken(user); // Runs once when component mounts
+     const data = await createLinkToken(user); // Runs once when component mounts
 
-     //setToken(data?.linkToken);
+     setToken(data?.linkToken);
 
     }
     getLinkToken();
-  }, []);
+  }, [user]);
 
 
 
@@ -32,16 +34,21 @@ const PlaidLink = ({ user, variant }: PlaidLinkProps) => {
     router.push('/');
   }, [user])
 
+  //use hook
   const config: PlaidLinkOptions = {
     token,
     onSuccess
   }
 
+  const { open, ready } = usePlaidLink(config);
   return (
     <>
       {variant === 'primary' ? (
-        <Button className='plaidlink-primary'>
-          Connect bank
+        <Button
+        onClick={open}
+          disabled={!ready}
+        className='plaidlink-primary'>
+          connect bank
         </Button>
       ):variant ==="ghost"?(
         <Button>
