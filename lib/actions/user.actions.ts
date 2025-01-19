@@ -1,3 +1,8 @@
+//handling all the user lifecycle and authentication flow.
+//handles all the database operations (getting bank records from your database)
+//User Authentication Flow: "I need to manage user sessions" :  1.signIn()     -> "Let users log in" 2.signUp()     -> "Create new user accounts" 3.getLoggedInUser() -> "Check if someone is logged in" 4.logoutAccount() -> "Let users log out"
+//Bank Connection Setup: "I need to let users connect their banks" : createLinkToken() -> "Start the Plaid connection process" createBankAccount()
+
 "use server";
 
 import { ID } from "node-appwrite";
@@ -20,6 +25,7 @@ const {
   APPWRITE_USER_COLLECTION_ID: USER_COLLECTION_ID,
   APPWRITE_BANK_COLLECTION_ID: BANK_COLLECTION_ID,
 } = process.env;
+
 
 export const signIn = async ({ email, password }: signInProps) => {
   try {
@@ -123,6 +129,7 @@ export const createLinkToken = async (user: User) => {
   }
 };
 
+//"Start the Plaid connection process"
 export const createBankAccount = async ({
   userId,
   bankId,
@@ -154,6 +161,7 @@ export const createBankAccount = async ({
   }
 }
 
+//"Complete the Plaid connection process"
 export const exchangePublicToken = async ({
   publicToken,
   user,
@@ -211,5 +219,39 @@ export const exchangePublicToken = async ({
     });
   } catch (error) {
     console.error("An error occurred while creating exchanging token:", error);
+  }
+};
+
+
+//get user's bank connections from database (using getBanks and getBank)
+export const getBanks = async ({ userId }: getBanksProps) => {
+  try {
+    const { database } = await createAdminClient();
+    
+    const banks = await database.listDocuments(
+      DATABASE_ID!,
+      BANK_COLLECTION_ID!,
+      [Query.equal('userId', [userId])]
+    );
+    
+    return parseStringify(banks.documents);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getBank = async ({ documentId }: getBanksProps) => {
+  try {
+    const { database } = await createAdminClient();
+    
+    const bank = await database.listDocuments(
+      DATABASE_ID!,
+      BANK_COLLECTION_ID!,
+      [Query.equal('$id', [documentId])]
+    );
+    
+    return parseStringify(bank.documents[0]);
+  } catch (error) {
+    console.log(error);
   }
 };
